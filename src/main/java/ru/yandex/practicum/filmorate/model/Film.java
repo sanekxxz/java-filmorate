@@ -1,9 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.validation.DateAfterOrEqual;
@@ -41,6 +38,6 @@ public class Film {
     /**
      * Продолжительность фильма.
      */
-    @Min(value = 0, message = "Число должно быть положительным.")
+    @Positive(message = "Продолжительность должна быть положительной.")
     private int duration;
 }

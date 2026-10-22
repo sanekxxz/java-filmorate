@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -44,7 +45,6 @@ public class FilmController {
     public Film create(@Valid @RequestBody final Film film) {
 
         if (films.containsValue(film)) {
-            log.error("Такой фильм уже есть");
             throw new ValidationException("Такой фильм уже есть");
         }
 
@@ -84,8 +84,8 @@ public class FilmController {
             log.info("Данные фильма обновленны");
             return oldFilm;
         }
-        log.error("Такого фильма нет");
-        throw new ValidationException("Такого фильма нет");
+
+        throw new NotFoundException("Такого фильма нет");
     }
 
     /**

@@ -2,13 +2,13 @@ package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -47,7 +47,6 @@ public class UserController {
     public User create(@Valid @RequestBody final User user) {
 
         if (users.containsValue(user)) {
-            log.warn("Такой пользователь уже есть!");
             throw new ValidationException("Такой пользователь уже есть!");
         }
 
@@ -68,16 +67,14 @@ public class UserController {
      * @return возвращает пользователя с новыми данными
      */
     @PutMapping
-    public User update(@Validated @RequestBody final User newUser) {
+    public User update(@Valid @RequestBody final User newUser) {
         if (newUser.getId() == null) {
-            log.warn("Id должен быть указан");
             throw new ValidationException("Id должен быть указан");
         }
         if (users.containsKey(newUser.getId())) {
             User oldUser = users.get(newUser.getId());
             if (!oldUser.getEmail().equalsIgnoreCase(newUser.getEmail())) {
                 if (equalsEmail(newUser)) {
-                    log.warn("Email уже используется");
                     throw new ValidationException("Email уже используется");
                 }
                 oldUser.setEmail(newUser.getEmail());
@@ -96,9 +93,7 @@ public class UserController {
             log.info("Данные пользователя обновленны");
             return oldUser;
         }
-        log.warn("Пользователь не найден");
-        throw new ValidationException("Пользователь не найден");
-
+        throw new NotFoundException("Пользователь не найден");
     }
 
     /**
