@@ -27,7 +27,7 @@ public class InMemoryUserStorage implements UserStorage {
 
         User user = users.get(id);
 
-        if(user == null) {
+        if (user == null) {
             throw new NotFoundException("Такого пользователя нет");
         }
 
@@ -41,7 +41,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User delete(Long id) {
-        if(!users.containsKey(id)) {
+        if (!users.containsKey(id)) {
             throw new ValidationException("Такого пользователя нету");
         }
         return users.remove(id);

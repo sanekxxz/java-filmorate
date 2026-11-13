@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
@@ -38,14 +37,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends")
-    public Collection<User> findAllFriends(@PathVariable(required = false, value = "id") Long id){
+    public Collection<User> findAllFriends(@PathVariable(required = false, value = "id") Long id) {
         return userService.findAllFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
     @ResponseStatus(HttpStatus.OK)
     public Collection<User> listFriendsCommon(@PathVariable(required = false, value = "id") Long id,
-                                              @PathVariable(required = false, value = "otherId") Long otherId){
+                                              @PathVariable(required = false, value = "otherId") Long otherId) {
         return userService.listFriendsCommon(id, otherId);
     }
 

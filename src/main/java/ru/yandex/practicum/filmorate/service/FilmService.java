@@ -22,7 +22,7 @@ public class FilmService {
     private final UserStorage userStorage;
 
     public Film addFilmsLike(Long id, Long userId) {
-        if(!userStorage.existsById(userId)) {
+        if (!userStorage.existsById(userId)) {
             throw new NotFoundException("Пользователя нет");
         }
         Film film = filmStorage.findById(id);
@@ -33,7 +33,7 @@ public class FilmService {
     }
 
     public Film deleteLike(Long id, Long userId) {
-        if(!userStorage.existsById(userId)) {
+        if (!userStorage.existsById(userId)) {
             throw new NotFoundException("Пользователя нет");
         }
 
