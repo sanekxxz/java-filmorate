@@ -23,6 +23,11 @@ public class UserController {
         return userStorage.findAll();
     }
 
+    @GetMapping("/{id}")
+    public User findUser(@PathVariable(required = false, value = "id") Long id) {
+        return userStorage.findById(id);
+    }
+
     @PutMapping("/{id}/friends/{friendId}")
     @ResponseStatus(HttpStatus.OK)
     public User addFriends(@PathVariable(required = false, value = "id") Long id,

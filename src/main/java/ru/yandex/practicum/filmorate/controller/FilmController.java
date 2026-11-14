@@ -27,6 +27,11 @@ public class FilmController {
         return filmService.addFilmsLike(id, userId);
     }
 
+    @GetMapping("/{id}")
+    public Film findFilm(@PathVariable(required = false, value = "id") Long id) {
+        return filmStorage.findById(id);
+    }
+
     @DeleteMapping("/{id}/like/{userId}")
     public Film deleteLike(@PathVariable(required = false, value = "id") Long id,
                              @PathVariable(required = false, value = "userId") Long userId) {

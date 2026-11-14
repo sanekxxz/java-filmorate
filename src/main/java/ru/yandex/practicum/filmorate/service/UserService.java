@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.InternalServerException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
@@ -19,6 +20,11 @@ public class UserService {
     public User addFriends(Long id, Long friendId) {
         User user = userStorage.findById(id);
         User friend = userStorage.findById(friendId);
+
+        if (id.equals(friendId)) {
+            throw new InternalServerException("Нельзя добавить самого себя");
+        }
+
         user.getFriend().add(friendId);
         friend.getFriend().add(id);
 

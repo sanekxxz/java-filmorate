@@ -19,6 +19,7 @@ public class Film {
     private String name;
 
     @Size(max = MAX_DESC_LENGTH, message = "Максимальная длина 200 символов.")
+    @NotNull
     private String description;
 
     @NotNull
