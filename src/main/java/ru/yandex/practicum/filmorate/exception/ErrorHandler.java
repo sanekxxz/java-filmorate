@@ -1,29 +1,49 @@
 package ru.yandex.practicum.filmorate.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
-
 public class ErrorHandler {
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-
-    public Map<String, String> handleValidation(ValidationException e) {
+    public ErrorResponse handleValidation(ValidationException e) {
         log.warn("Ошибка валидации: {}", e.getMessage());
-        return Map.of("error", e.getMessage());
+        return new ErrorResponse("Ошибка валидации:", e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleArgumentValidation(
+            MethodArgumentNotValidException e) {
+
+        String message = e.getBindingResult().getFieldErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.joining("; "));
+
+        log.warn("Ошибка валидации: {}", message);
+        return new ErrorResponse("Ошибка валидации", message);
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> handleValidation(NotFoundException e) {
+    public ErrorResponse handleNotFound(NotFoundException e) {
         log.warn("Ошибка: {}", e.getMessage());
-        return Map.of("error", e.getMessage());
+        return new ErrorResponse("Объект не найден:", e.getMessage());
+    }
+
+    @ExceptionHandler(InternalServerException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handlerInternalServer(InternalServerException e) {
+        log.warn("Исключение: {}", e.getMessage());
+        return new ErrorResponse("Исключение:", e.getMessage());
     }
 }
